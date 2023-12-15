@@ -13,6 +13,7 @@ describe('Issue deletion functionality', () => {
     it('Issue Deletion', () => {
         //Delete the issue by clicking the delete button and confirming the deletion.
         cy.get('[data-testid="icon:trash"]').click()
+        cy.get('[data-testid="modal:confirm"]').should('exist')
         cy.contains('Delete issue').click()
 
         //Assert that the deletion confirmation dialogue is not visible.
@@ -26,12 +27,13 @@ describe('Issue deletion functionality', () => {
 
         //Click the Delete Issue button and then Cancel the deletion in the confirmation pop-up.
         cy.get('[data-testid="icon:trash"]').click()
+        cy.get('[data-testid="modal:confirm"]').should('exist')
         cy.contains('Cancel').click()
 
         //Assert that the deletion confirmation dialogue is not visible.
         cy.get('[data-testid="modal:confirm"]').should('not.exist')
         cy.get('[data-testid="modal:issue-details"]').should('exist')
-        cy.get('[data-testid="icon-close"]').eq(0).click()
+        cy.get('[data-testid="icon:close"]').eq(0).click()
 
         //Assert that the issue is NOT deleted and is still displayed on the Jira board.
         cy.reload()
