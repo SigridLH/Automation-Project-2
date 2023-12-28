@@ -69,7 +69,7 @@ describe("Issue comments creating, editing and deleting", () => {
       .should("not.exist");
   });
 
-  it.only("Should create, edit and delete a comment successfully", () => {
+  it("Should create, edit and delete a comment successfully", () => {
     const fieldAddaComment = "Add a comment...";
     const comment = "Sigrid adds a comment";
     const getAreaForComment = () =>
@@ -107,6 +107,7 @@ describe("Issue comments creating, editing and deleting", () => {
         .click()
         .should("not.exist");
 
+      //Edit comment
       getAreaForComment()
         .should("contain", comment)
         .clear()
@@ -124,9 +125,11 @@ describe("Issue comments creating, editing and deleting", () => {
       );
       getIssueComment().should("contain", editedComment);
 
+      // Delete comment
       getIssueComment().first().contains("Delete").should("be.visible").click();
     });
 
+    //Assertions in the deletion confirmation dialogue
     cy.get('[data-testid="modal:confirm"]').should("exist");
     cy.get('[data-testid="modal:confirm"]').within(() => {
       cy.contains("Are you sure you want to delete this comment?").should(
@@ -138,6 +141,7 @@ describe("Issue comments creating, editing and deleting", () => {
     });
     cy.get('[data-testid="modal:confirm"]').should("not.exist");
 
+    //Assert that comment is deleted
     getIssueDetailsModal().within(() => {
       getIssueComment().should(
         "have.length",
