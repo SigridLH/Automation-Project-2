@@ -67,14 +67,14 @@ describe("Issue time estimation and time logging functionality", () => {
         getInputNumberHours().eq(0).click().type("2");
         getInputNumberHours().eq(1).click().type("5");
 
-        LogTimeAssertLoggedAndRemainingTime();
+        logTimeAssertLoggedAndRemainingTime();
 
         cy.contains("Done").click();
       });
     getTimeTrackingModal().should("not.exist");
 
     getIssueDetailsModal().within(() => {
-      LogTimeAssertLoggedAndRemainingTime();
+      logTimeAssertLoggedAndRemainingTime();
 
       //Remove logged time
       cy.get('[data-testid="icon:stopwatch"]').click();
@@ -86,14 +86,14 @@ describe("Issue time estimation and time logging functionality", () => {
         getInputNumberHours().eq(0).click().clear();
         getInputNumberHours().eq(1).click().clear();
 
-        RemoveLoggedTimeAssertLoggedAndRemainingTime();
+        removeLoggedTimeAssertLoggedAndRemainingTime();
 
         cy.contains("Done").click();
       });
     getTimeTrackingModal().should("not.exist");
 
     getIssueDetailsModal().within(() => {
-      RemoveLoggedTimeAssertLoggedAndRemainingTime();
+      removeLoggedTimeAssertLoggedAndRemainingTime();
     });
   });
 
@@ -147,14 +147,14 @@ describe("Issue time estimation and time logging functionality", () => {
     cy.get('[data-testid="list-issue"]').first().click();
   }
 
-  function LogTimeAssertLoggedAndRemainingTime() {
+  function logTimeAssertLoggedAndRemainingTime() {
     cy.contains("2h logged").should("be.visible");
     cy.contains("5h remaining").should("be.visible");
     cy.contains("No time logged").should("not.exist");
     cy.contains("10h estimated").should("not.exist");
   }
 
-  function RemoveLoggedTimeAssertLoggedAndRemainingTime() {
+  function removeLoggedTimeAssertLoggedAndRemainingTime() {
     cy.contains("2h logged").should("not.exist");
     cy.contains("5h remaining").should("not.exist");
     cy.contains("No time logged").should("be.visible");
