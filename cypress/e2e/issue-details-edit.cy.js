@@ -75,31 +75,26 @@ describe("Issue details editing", () => {
     let priorityArray = [];
 
     getIssueDetailsModal().within(() => {
-      const selectedPriority = getSelectedPriority();
+      let selectedPriority = getSelectedPriority();
       priorityArray.push(selectedPriority);
 
       cy.log(
         `Added value: ${selectedPriority}, Array length: ${priorityArray.length}`
       );
 
-      // Access all options from the dropdown
+      // Access all priorities from the dropdown
 
       for (let i = 0; i < 4; i++) {
-        function getOption() {
-          getOptionsFromDropdown()
-            .eq(i)
-            .children()
-            .trigger("mouseover")
-            .find("div")
-            .invoke("text");
-        }
-        let priorityOption = getOption();
-        priorityArray.push(priorityOption);
-        cy.log(
-          `Added value: ${priorityOption}, Array length: ${priorityArray.length}`
-        );
+        getPriorityFromDropdown(i).then((text) => {
+          let priorityOption = text;
+          cy.log(priorityOption);
+          priorityArray.push(priorityOption);
+          cy.log(
+            `Added value: ${priorityOption}, Array length: ${priorityArray.length}`
+          );
+        });
       }
-      expect(priorityArray.length).to.equal(expectedLength);
+      cy.wrap(priorityArray).should("have.length", expectedLength);
     });
   });
 
@@ -123,13 +118,14 @@ describe("Issue details editing", () => {
     return "High";
   }
 
-  function getOptionsFromDropdown() {
+  function getPriorityFromDropdown(i) {
     return cy
       .get('[data-testid="select:priority"]')
       .click()
+      .get('[placeholder="Search"]')
       .next()
       .children()
-      .eq(1)
-      .children();
+      .eq(i)
+      .invoke("text");
   }
 });
