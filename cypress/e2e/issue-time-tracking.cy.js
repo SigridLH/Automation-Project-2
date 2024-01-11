@@ -24,6 +24,7 @@ describe("Issue time estimation and time logging functionality", () => {
       closeIssueDetailsModal();
     });
 
+    //Asserting that the estimation is added and visible.
     openFirstIssueFromList();
     getIssueDetailsModal().within(() => {
       getInputNumberHours().should("have.value", "10");
@@ -34,6 +35,7 @@ describe("Issue time estimation and time logging functionality", () => {
       closeIssueDetailsModal();
     });
 
+    //Asserting that the updated value is visible.
     openFirstIssueFromList();
     getIssueDetailsModal().within(() => {
       getInputNumberHours().should("have.value", "20");
@@ -44,6 +46,7 @@ describe("Issue time estimation and time logging functionality", () => {
       closeIssueDetailsModal();
     });
 
+    //Asserting that the value is removed.
     openFirstIssueFromList();
     getIssueDetailsModal().within(() => {
       getInputNumberHours().should("have.value", "");
@@ -67,12 +70,14 @@ describe("Issue time estimation and time logging functionality", () => {
         getInputNumberHours().eq(0).click().type("2");
         getInputNumberHours().eq(1).click().type("5");
 
+        //Asserting that the time is logged on Time tracking modal.
         logTimeAssertLoggedAndRemainingTime();
 
         cy.contains("Done").click();
       });
     getTimeTrackingModal().should("not.exist");
 
+    //Asserting that the time is logged on Issue Details modal.
     getIssueDetailsModal().within(() => {
       logTimeAssertLoggedAndRemainingTime();
 
@@ -86,12 +91,14 @@ describe("Issue time estimation and time logging functionality", () => {
         getInputNumberHours().eq(0).click().clear();
         getInputNumberHours().eq(1).click().clear();
 
+        //Asserting that the logged time is removed on Time tracking modal.
         removeLoggedTimeAssertLoggedAndRemainingTime();
 
         cy.contains("Done").click();
       });
     getTimeTrackingModal().should("not.exist");
 
+    //Asserting that the logged time is removed on Issue Details modal.
     getIssueDetailsModal().within(() => {
       removeLoggedTimeAssertLoggedAndRemainingTime();
     });

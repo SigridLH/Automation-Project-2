@@ -70,7 +70,7 @@ describe("Issue details editing", () => {
 
   //TASK 1 (Sprint#2 BONUS assignment)
 
-  it.only("Should have five elements in issue priorities", () => {
+  it("Should have five elements in issue priorities", () => {
     const expectedLength = 5;
     let priorityArray = [];
 
@@ -82,15 +82,24 @@ describe("Issue details editing", () => {
         `Added value: ${selectedPriority}, Array length: ${priorityArray.length}`
       );
 
-      //cy.get('[data-testid="select:priority"]').click();
+      // Access all options from the dropdown
 
-      // the appropriate selector to access all options from the dropdown
-
-      const options = getOptionsFromDropdown();
-
-      priorityArray.push(options);
-
-      cy.log(`Added value: ${options}, Array length: ${priorityArray.length}`);
+      for (let i = 0; i < 4; i++) {
+        function getOption() {
+          getOptionsFromDropdown()
+            .eq(i)
+            .children()
+            .trigger("mouseover")
+            .find("div")
+            .invoke("text");
+        }
+        let priorityOption = getOption();
+        priorityArray.push(priorityOption);
+        cy.log(
+          `Added value: ${priorityOption}, Array length: ${priorityArray.length}`
+        );
+      }
+      expect(priorityArray.length).to.equal(expectedLength);
     });
   });
 
@@ -115,7 +124,12 @@ describe("Issue details editing", () => {
   }
 
   function getOptionsFromDropdown() {
-    cy.get('[data-testid="select:priority"]').click();
-    cy.get('[data-testid="select-option:Highest"]').click();
+    return cy
+      .get('[data-testid="select:priority"]')
+      .click()
+      .next()
+      .children()
+      .eq(1)
+      .children();
   }
 });
